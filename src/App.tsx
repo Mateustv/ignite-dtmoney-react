@@ -5,6 +5,9 @@ import { createServer, Model } from "miragejs"
 import { useState } from "react"
 import { NewTransitionModal } from "./components/NewTrasitionModal"
 import { TransactionsProvider } from "./TransactionsContext"
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 createServer({
 
@@ -52,6 +55,7 @@ createServer({
 })
 
 export default function App() {
+
 
   const [isNewTransitionModal, setIsNewTransitionModal] = useState(false)
 

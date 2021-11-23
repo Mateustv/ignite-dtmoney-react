@@ -19,16 +19,22 @@ export function NewTransitionModal({ isOpen, handleClose }: TrasitionModal) {
   const [value, setValue] = useState(0)
   const [category, setCategory] = useState('')
 
-  function handleNewSubmitTransition(event: FormEvent) {
+  async function handleNewSubmitTransition(event: FormEvent) {
 
     event.preventDefault()
-    transactionPost({
+
+    await transactionPost({
       title,
       category,
       type,
       amount: value,
     })
 
+    setType('deposit')
+    setTitle('')
+    setValue(0)
+    setCategory('')
+    handleClose()
   }
 
   return (
