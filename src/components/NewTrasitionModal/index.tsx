@@ -3,8 +3,8 @@ import { Container, RadioBox, TransactionTypeContainer } from "./style"
 import closeImg from "../../assets/close.svg"
 import inCome from "../../assets/income.svg"
 import outCome from "../../assets/outcome.svg"
-import { FormEvent, useState } from "react"
-import { api } from "../../services/api"
+import { FormEvent, useContext, useState } from "react"
+import { TransactionsContext } from "../../TransactionsContext"
 
 interface TrasitionModal {
   isOpen: boolean;
@@ -13,6 +13,7 @@ interface TrasitionModal {
 
 export function NewTransitionModal({ isOpen, handleClose }: TrasitionModal) {
 
+  const { transactionPost } = useContext(TransactionsContext)
   const [type, setType] = useState('deposit')
   const [title, setTitle] = useState('')
   const [value, setValue] = useState(0)
@@ -21,15 +22,13 @@ export function NewTransitionModal({ isOpen, handleClose }: TrasitionModal) {
   function handleNewSubmitTransition(event: FormEvent) {
 
     event.preventDefault()
-
-    const data = {
+    transactionPost({
       title,
-      value,
       category,
       type,
-    }
+      amount: value,
+    })
 
-    api.post('/transactions', data)
   }
 
   return (

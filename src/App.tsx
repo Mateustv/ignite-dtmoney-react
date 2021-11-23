@@ -1,9 +1,10 @@
-import { Dashboard } from "./components/Dashboard";
-import { Header } from "./components/Header";
-import { GlobalStyle } from "./styles/global";
-import { createServer, Model } from "miragejs";
-import { useState } from "react";
-import { NewTransitionModal } from "./components/NewTrasitionModal";
+import { Dashboard } from "./components/Dashboard"
+import { Header } from "./components/Header"
+import { GlobalStyle } from "./styles/global"
+import { createServer, Model } from "miragejs"
+import { useState } from "react"
+import { NewTransitionModal } from "./components/NewTrasitionModal"
+import { TransactionsProvider } from "./TransactionsContext"
 
 createServer({
 
@@ -63,13 +64,21 @@ export default function App() {
   }
 
   return (
-    <>
-      <Header onOpenNewTransactionModal={handleOpenNewTransitionModal} />
-      <NewTransitionModal isOpen={isNewTransitionModal} handleClose={handleCloseNewTransitionModal} />
+    <TransactionsProvider>
+      <Header
+        onOpenNewTransactionModal={handleOpenNewTransitionModal}
+      />
+
+      <NewTransitionModal
+        isOpen={isNewTransitionModal}
+        handleClose={handleCloseNewTransitionModal}
+      />
+
       <Dashboard />
+
       <GlobalStyle></GlobalStyle>
-    </>
-  );
+    </TransactionsProvider>
+  )
 }
 
 
