@@ -1,8 +1,10 @@
 import Modal from "react-modal"
-import { Container, TransactionTypeContainer } from "./style"
+import { Container, RadioBox, TransactionTypeContainer } from "./style"
 import closeImg from "../../assets/close.svg"
 import inCome from "../../assets/income.svg"
 import outCome from "../../assets/outcome.svg"
+import { FormEvent, useState } from "react"
+import { api } from "../../services/api"
 
 interface TrasitionModal {
   isOpen: boolean;
@@ -10,6 +12,26 @@ interface TrasitionModal {
 }
 
 export function NewTransitionModal({ isOpen, handleClose }: TrasitionModal) {
+
+  const [type, setType] = useState('deposit')
+  const [title, setTitle] = useState('')
+  const [value, setValue] = useState(0)
+  const [category, setCategory] = useState('')
+
+  function handleNewSubmitTransition(event: FormEvent) {
+
+    event.preventDefault()
+
+    const data = {
+      title,
+      value,
+      category,
+      type,
+    }
+
+    api.post('/transactions', data)
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -22,33 +44,50 @@ export function NewTransitionModal({ isOpen, handleClose }: TrasitionModal) {
         <img src={closeImg} alt="fechar " />
       </button>
 
-      <Container>
+      <Container onSubmit={handleNewSubmitTransition}>
         <h2>Cadastrar transação</h2>
 
-        <input placeholder='Título' />
+        <input
+          placeholder='Título'
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+        />
 
         <input
           placeholder='Valor'
           type='number'
+          value={value}
+          onChange={event => setValue(Number(event.target.value))}
         />
 
         <TransactionTypeContainer>
-          <button
+
+          <RadioBox
             type="button"
+            onClick={() => setType('deposit')}
+            isActive={type === 'deposit'}
+            activeColor='green'
           >
             <img src={inCome} alt="Entrada" />
             <span>Entrada</span>
-          </button>
+          </RadioBox>
 
-          <button
+          <RadioBox
             type="button"
+            onClick={() => setType('withdraw')}
+            isActive={type === 'withdraw'}
+            activeColor='red'
           >
             <img src={outCome} alt="Saida" />
             <span>Saida</span>
-          </button>
+          </RadioBox>
         </TransactionTypeContainer>
 
-        <input placeholder='Categoria' />
+        <input
+          placeholder='Categoria'
+          value={category}
+          onChange={event => setCategory(event.target.value)}
+        />
 
         <button type="submit">Cadastrar</button>
       </Container>
